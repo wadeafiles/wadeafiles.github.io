@@ -1316,7 +1316,7 @@ document.addEventListener('alpine:init', () => {
 					//console.log(search)
 					this.wadeasearchresults = []
 					this.wadeasearchresults = await this.client.collection('wadeafiles_items').getFullList({
-							   sort: '-number',
+							   sort: '-epoch',
 							   filter: search,
 						   });
 					len=this.wadeasearchresults.length
@@ -1378,7 +1378,7 @@ document.addEventListener('alpine:init', () => {
 						SortString="-created"
 						if(this.loadlast){
 							search+= '&&epoch>="'+ Math.floor(new Date(new Date().setHours(0,0,0,0)).setDate(new Date().getDate() - 1)/1000)+'"'
-               				SortString="-created"
+               				SortString="-epoch"
 						}
 						ShowRegisterByMeResult = await this.client.collection('wadeafiles_items').getFullList({
 							   sort: SortString,
