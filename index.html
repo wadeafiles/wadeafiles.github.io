@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <title>ملفات الوديعة</title>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <meta name="description" content="Wadea Files" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0" />
+  <link rel="canonical" href="https://wadeafiles.github.io/" />
+  <link rel="manifest" href="manifest.webmanifest">
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="shortcut icon" href="favicon.png" type="image/x-icon">
+  <link rel="icon" href="favicon.png" type="image/x-icon">
+  <link rel="apple-touch-icon" href="/ios/512.png">
+  <link rel="android-chrome-192x192" type="image/png" sizes="192x192" href="android/android-launchericon-192-192.png">
+  <link rel="android-chrome-512x512" type="image/png" sizes="512x512" href="android/android-launchericon-512-512.png">
+  <link rel="favicon-16x16" type="image/png" sizes="16x16" href="ios/16.png">
+  <link rel="favicon-32x32" type="image/png" sizes="16x16" href="ios/32.png">
+  <meta name="pwa-capable" content="yes">
+  <link rel="stylesheet" href="cropper.css">
+  <script src="js/pocketbase.umd.js"></script>
+  <script defer src="js/notify.min.js"></script>
+  <script defer src="js/intersect.cdn.min.js"></script>
+  <script defer src="js/alpinejs.cdn.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> 
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" integrity="sha512-aD9ophpFQ61nFZP6hXYu4Q/b/USW7rpLCQLX6Bi0WJHXNO7Js/fUENpBQf/+P4NtpzNX0jSgR5zVvPOJp+W2Kg==" crossorigin="anonymous" referrerpolicy="no-referrer" /> 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/js/select2.min.js" defer integrity="sha512-4MvcHwcbqXKUHB6Lx3Zb5CEAVoE9u84qN+ZSMM6s7z8IeJriExrV3ND5zRze9mxNlABJ6k864P/Vl8m0Sd3DtQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
+  <link rel="stylesheet" href="css/pico.min.css">
+  <link href="css/boxicons.min.css" rel='stylesheet'>
+  <link rel="preload" as="font" href='fonts/boxicons.woff2' type="font/woff2" crossorigin="anonymous">
+
+
+  <style>
+	      .label {
+      cursor: pointer;
+    }
+
+    .alert {
+      display: none;
+    }
+
+    .img-container img {
+      max-width: 100%;
+    }
+
+details summary::after {
+    float: left;
+}
+#modal, #modal2{
+	    max-width: 500px;
+    overflow: scroll;
+        text-align: -webkit-center;
+}
+.croppmer-container {
+	    max-width: 500px;
+    overflow: hidden;
+}
+.img-container{
+	max-width: 350px;
+	max-width: 350px;
+	width: 300px;
+}
+.modal-body{
+text-align: -webkit-center;
+}
+.modal-content{
+    max-width: 500px;
+
+}
+.cropper-crop-box{
+    width: 200px;
+    height: 200px;	
+}
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}
+.rounded {
+    border-radius: 50%;
+}
+#modal {.cropper-view-box, .cropper-face {
+    border-radius: 50%;
+}}
+#modal2 {.cropper-view-box, .cropper-face {
+    border-radius: unset;
+}}
+
+:root{
+--block-spacing-vertical: calc(var(--spacing) * 1.5);	
+}
+section {
+    --block-spacing-vertical: calc(var(--spacing) * 2);
+}
+        .loader { 
+            border: 12px solid #f3f3f3; 
+            border-radius: 50%; 
+            border-top: 12px solid #444444; 
+            width: 70px; 
+            height: 70px; 
+            animation: spin 1s linear infinite; 
+            visibility: hidden;
+            z-index: 1000;
+        } 
+          
+        @keyframes spin { 
+            100% { 
+                transform: rotate(360deg); 
+            } 
+        } 
+          
+        .center { 
+            position: fixed;
+            top: 0; 
+            bottom: 0; 
+            left: 0; 
+            right: 0; 
+            margin: auto; 
+        } 
+	
+	/*  body {
+	  overscroll-behavior-y: contain;
+	} */
+.disabledbutton {
+    pointer-events: none;
+    opacity: 0.5;
+}	
+select:not([multiple],[size]) {
+    background-image: none;
+    appearance: auto;
+    text-overflow: ellipsis;
+}
+
+	/*@media (min-width:900px) {
+		html {
+			max-width: 500px;
+			margin-left: 50%;
+			transform: translate(-50%, 0%);
+			zoom: 75%;
+			min-height: calc( 100vh / .75);
+		}
+	} */
+:root {
+    --font-size: 15px;
+}
+		html {
+			height:100vh;
+		}
+	
+	
+	
+.eventloader {
+  width: 215px;
+  height: 215px;
+  max-width: 100%;
+  display: block;
+  margin: auto;
+  position: relative;
+  background: #FFF;
+  box-sizing: border-box;
+}
+.eventloader::after {
+  content: '';
+  width: calc(100% - 30px);
+  height: calc(100% - 15px);
+  top: 15px;
+  left: 15px;
+  position: absolute;
+  background-image: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5) 50%, transparent 100%),
+   linear-gradient(#DDD 100px, transparent 0),
+   linear-gradient(#DDD 16px, transparent 0),
+   linear-gradient(#DDD 50px, transparent 0);
+  background-repeat: no-repeat;
+  background-size: 75px 175px, 100% 100px, 100% 16px, 100% 30px;
+  background-position: -185px 0, center 0, center 115px, center 142px;
+  box-sizing: border-box;
+  animation: animeventloader 1s linear infinite;
+}
+
+@keyframes animeventloader {
+  to {
+    background-position: 185px 0, center 0, center 115px, center 142px;
+  }
+}
+.textareanotexpandable{
+text-align: start;unicode-bidi: plaintext;;margin-bottom: 0px;margin-top: 0px;overflow: hidden;resize: none;border: none;padding-top: 0px;padding-bottom: 0px;
+}
+.textareaexpandable{
+text-align: start;unicode-bidi: plaintext;;margin-bottom: 0px;margin-top: 0px;overflow: hidden;resize: none;border: none;padding-top: 0px;padding-bottom: 0px;background: -webkit-linear-gradient(#333,#eee);-webkit-background-clip: text;-webkit-text-fill-color: transparent;}
+
+*:focus {
+    outline:none !important;
+    outline-width: 0 !important;
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+}
+@media (min-width: 992px){
+.maingrid {
+	grid-template-columns: 200px auto;
+}
+.sidenavfull{
+	overflow: auto;
+    position: fixed;
+    width: 200px;
+    border: solid;
+    border-color: darkgray;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: calc( 100% - 75px );
+    padding-top: 10px;
+    background: white;
+}
+}
+@media (max-width: 991px){
+.sidenavfull{
+	overflow: auto;
+    border: solid;
+    border-color: darkgray;
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 10px;
+    background: white;
+    margin: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 2em;
+}
+}
+.selectednav{
+	background-color: var(--primary-focus);	
+	    color: black;
+}
+.nselectednav{
+	color: black;
+}
+.public{
+	color: #005aff
+}
+.npublic{
+	color: black;
+}
+.toastwrapper{
+position: fixed;bottom: 0px;right: 0px;z-index: 1000;direction: rtl;left: 50%;transform: translateX(-50%);width: max-content;max-width: 100%;max-height: 100%;overflow: hidden;
+}
+.toastsuccess{
+box-shadow: none;background: #e8f5e9;color: #1b5e20;unicode-bidi: plaintext;padding: 1em;margin: 1em;grid-template-columns: 34px auto;
+}
+.toastfail{
+box-shadow: none;background: #ffebee;color: #b71c1c;unicode-bidi: plaintext;padding: 1em;margin: 1em;grid-template-columns: 34px auto;
+}
+.data-\[notify-show\=false\]\:hidden[data-notify-show=false] {
+    display: none
+}
+
+@keyframes slide-in {
+   /*0% {
+        transform: translateY(100%)
+    }
+
+    to {
+        transform: translateY(0)
+    }*/
+       0% {opacity: 0;}
+   100% {opacity: 1;} 
+   
+}
+
+.data-\[notify-show\=true\]\:animate-slide-in[data-notify-show=true] {
+    animation: slide-in .15s ease-in forwards
+}
+
+@keyframes slide-out {
+   /* 0% {
+        transform: translateY(0)
+    }
+
+    to {
+        transform: translateY(100%)
+    }*/
+       0% {opacity: 1;}
+   100% {opacity: 0;} 
+}
+
+.data-\[notify-show\=false\]\:animate-slide-out[data-notify-show=false] {
+    animation: slide-out .15s ease-in forwards
+}
+
+.login-with-google-btn {
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgiIGhlaWdodD0iMTgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNMTcuNiA5LjJsLS4xLTEuOEg5djMuNGg0LjhDMTMuNiAxMiAxMyAxMyAxMiAxMy42djIuMmgzYTguOCA4LjggMCAwIDAgMi42LTYuNnoiIGZpbGw9IiM0Mjg1RjQiIGZpbGwtcnVsZT0ibm9uemVybyIvPjxwYXRoIGQ9Ik05IDE4YzIuNCAwIDQuNS0uOCA2LTIuMmwtMy0yLjJhNS40IDUuNCAwIDAgMS04LTIuOUgxVjEzYTkgOSAwIDAgMCA4IDV6IiBmaWxsPSIjMzRBODUzIiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNNCAxMC43YTUuNCA1LjQgMCAwIDEgMC0zLjRWNUgxYTkgOSAwIDAgMCAwIDhsMy0yLjN6IiBmaWxsPSIjRkJCQzA1IiBmaWxsLXJ1bGU9Im5vbnplcm8iLz48cGF0aCBkPSJNOSAzLjZjMS4zIDAgMi41LjQgMy40IDEuM0wxNSAyLjNBOSA5IDAgMCAwIDEgNWwzIDIuNGE1LjQgNS40IDAgMCAxIDUtMy43eiIgZmlsbD0iI0VBNDMzNSIgZmlsbC1ydWxlPSJub256ZXJvIi8+PHBhdGggZD0iTTAgMGgxOHYxOEgweiIvPjwvZz48L3N2Zz4=);
+  
+  
+  background-position: 12px 11px;
+ /* width: auto;
+ background-repeat: no-repeat;
+	background-color: white;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  padding: 12px 16px 12px 42px;
+  border: none;
+  border-radius: 3px;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25);
+  color: #757575;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  margin: auto;*/
+}
+.login-with-google-btn:hover {
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+.login-with-google-btn:active {
+  background-color: #eeeeee;
+}
+.login-with-google-btn:focus {
+  outline: none;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 2px 4px rgba(0, 0, 0, 0.25), 0 0 0 3px #c8dafc;
+}
+.login-with-google-btn:disabled {
+  filter: grayscale(100%);
+  background-color: #ebebeb;
+  box-shadow: 0 -1px 0 rgba(0, 0, 0, 0.04), 0 1px 1px rgba(0, 0, 0, 0.25);
+  cursor: not-allowed;
+}
+:root {
+    --font-family: Noto Naskh Arabic;
+}
+body {
+    display: table;
+    height: 100svh;
+}
+.select2-container {
+    width: -webkit-fill-available!important;
+}
+.select2-container .select2-selection--single {
+    height: -webkit-fill-available;
+}
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+	padding-top: 11.25px;
+    padding-bottom: 11.25px;
+	padding-left: 37.5px!important;
+    padding-right: 15px!important;
+	line-height: unset;
+    direction: rtl;
+    font-size: 1.2em;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+    margin-top: 11.25px;
+}
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+	right: auto;
+}
+.select2-container--default .select2-results>.select2-results__options {
+    direction: rtl;
+	
+}
+.select2-container--default .select2-search--dropdown .select2-search__field {
+    direction: rtl;
+	padding-right: 10px;
+    padding-left: 10px;
+	border-radius: 1rem;
+	--icon-search: none;
+}
+.resultstable, .RegisterByMetable {
+  counter-reset: rowNumber;
+}
+
+.resultstablerow:before, .RegisterByMetablerow:before{
+  display: table-cell;
+  counter-increment: rowNumber;
+  content: counter(rowNumber);
+  padding-right: 0.3em;
+  text-align: right;
+  vertical-align: top;
+  position: absolute ;
+  margin-right: -20px;
+  opacity: .8;
+  font-weight: bold;
+  font-size: .8em;
+  background-color:var(--table-border-color-custom);
+  color: white;
+  padding: 5px 5px 5px 0;
+  margin-right: -2em;
+  min-width: 2em;
+}
+html{
+	--table-border-color-custom:#b3b3b36b;
+}
+  </style>
+</head>
+
+<body x-data="lists"  class="body" :class="showloading ? 'body disabledbutton':'body'" style="display: none;">
+<div>
+  <div class="toastwrapper" id="toastwrapper"></div>
+  <template id="toastsuccess">
+    <article @click="$el.remove()" role="alert" class="grid toastsuccess data-[notify-show=true]:animate-slide-in data-[notify-show=false]:animate-slide-out">
+    <i class='bx bx-check-circle bx-md' style="align-self: center;"></i> <label style="align-self: center;margin-bottom: 0px;"> {notificationText}</label>
+    </article>
+  </template>
+  <template id="toastfail">
+    <article @click="$el.remove()" role="alert" class="grid toastfail data-[notify-show=true]:animate-slide-in data-[notify-show=false]:animate-slide-out">
+    <i class='bx bx-error-circle bx-md' style="align-self: center;"></i> <label style="align-self: center;margin-bottom: 0px;"> {notificationText}</label>
+    </article>
+  </template>
+</div>
+	<div id="loader" class="center loader" :style="showloading ? 'visibility: visible;':'visibility: hidden;'"></div> 
+    <main class="container-fluid" style="padding-top: 60px;padding-bottom: 0px;">
+		<header>
+		  <nav style="
+    position: fixed;
+    width: 100%;
+    left: 0px;
+    transition: none;
+    z-index: 999;
+    /* right: auto; */
+    /* padding-left: 0px; */
+    top: 0px;
+    padding: px;
+    background: #efefef;
+    height: 40px;
+">
+			<ul>
+			  <li style="padding-left: 0px;
+			  position: absolute;
+			  top: 50%;
+			  left: 50%;
+			  transform: translate(-50%, -50%);
+			  padding-right: 0px;
+			  padding-bottom: 0px;
+			  padding-top: 0px;">
+				<h4 style="margin:0; text-align: center;">ملفات الوديعة</h4>
+			  </li>
+			</ul>
+			<ul style="padding-right: var(--spacing);">
+			  <i x-show="showpage != '0'" @click="window.scrollTo({top: 0});logout()" class="bx bx-log-out bx-sm" style="cursor: pointer"></i>
+			</ul>
+		  </nav>
+		</header>
+<div :class="showpage != '0'? 'grid maingrid':''" style="direction: rtl;">
+
+
+	<aside>
+  <nav x-show="showpage != '0'" class="sidenavfull">
+    <ul>
+	  <li><a :class="showpage == '1'? 'selectednav':'nselectednav'" @click="window.scrollTo({top: 0});showpage = '1'">تسجيل مشمول</a></li>
+	  <hr></hr>		
+	  <li><a :class="showpage == '2'? 'selectednav':'nselectednav'" @click="window.scrollTo({top: 0});showpage = '2'">البحث عن مشمول</a></li>
+	  <hr></hr>		
+	  <li><a :class="showpage == '3' && !loadlast ? 'selectednav':'nselectednav'" @click="window.scrollTo({top: 0});loadlast=false;ShowRegisterByMe()">عرض كل ما سجلته</a></li>
+	  <hr></hr>		
+	  <li><a :class="showpage == '3' && loadlast? 'selectednav':'nselectednav'" @click="window.scrollTo({top: 0});loadlast=true;ShowRegisterByMe()">عرض ما سجلته آخر يومين</a></li>
+    </ul>
+  </nav>
+</aside>
+<section>
+	<div x-show="showpage == '0'" style="direction: rtl">
+        <h2 style="direction: rtl;text-align: center;">تسجيل دخول</h2>
+		<div style="padding-right: 20px; padding-left: 20px;">
+			<button type="button" class="login-with-google-btn contrast outline" @click="login()" style="max-width: 20em;margin: auto;">تسجيل دخول باستخدام جوجل</button>
+		</div>
+    </div>
+	<div x-show="showpage == '0,1'" style="direction: rtl;">
+		<article>استخدم القائمة للقيام بالمهام</article>
+    </div>
+	<div x-show="showpage == '1'" style="direction: rtl">
+		<article>
+			<div id="infotable" style="display: table;width: 100%;">
+				<nav><h4 style="margin-bottom: .5em;">تسجيل مشمول:</h4></nav>
+				<hr style="margin-bottom: 1em;">
+				<table style="text-wrap: nowrap;">
+					<tbody>
+						<tr>
+							<td>
+								<label style="direction: rtl;font-size: 1.2em;">نوع المشمول</label>
+							</td>
+							<td colspan="2">
+								<select style="direction: rtl;font-size: 1.2em;margin-bottom: 0px;" x-model="wadea.type">
+									<option value="" disabled selected></option>
+									<option>محجوزات</option>
+									<option>وديعة</option>
+									<option>متروكات</option>
+									<option>مضبوطات</option>
+									<option>وارد جهات</option>
+									<option>متخلف</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label style="direction: rtl;font-size: 1.2em;">رقم المشمول</label>
+							</td>
+							<td style="grid-template-columns: auto auto;display: grid;">
+								<input style="direction: ltr;text-align: center;font-size: 1.2em;margin-bottom: 0px;padding-left: 5px;padding-right: 5px;" x-model="wadea.number" type="number" oninput="this.value=this.value.replace(/[^0-9]/g,'');"></input>
+
+								<select style="margin-right: 1.5em;direction: rtl;
+								font-size: 1.2em;
+								margin-bottom: 0px;
+								padding: 5px 5px 5px 5px;
+								width: auto;" x-model="wadea.year" style>
+									<option value="" disabled="" selected=""></option>
+									<option>2023</option>
+									<option>2024</option>
+								</select>							
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label style="direction: rtl;font-size: 1.2em;">وصف المشمول</label>
+							</td>
+							<td colspan="2" x-data="{showtextarea:false}">
+								<label style="margin-bottom: 0px;padding-top: 7.5px;padding-bottom: 7.5px;" x-show="!showtextarea" x-init="
+									$(document).ready(()=> {
+										desc = $($refs.desc).select2({tags: true,minimumResultsForSearch: Infinity});
+										desc.on('select2:select', (event) => {
+											wadea.desc = event.target.value;
+										});
+										$watch('wadea.desc', (value) => {
+											if(value=='اكتب وصف'){
+												showtextarea=true
+												delete wadea.desc
+												setTimeout(()=> {document.getElementById('textareaeditor').focus()},0)
+												
+												return
+											}
+											desc.val(value).trigger('change');
+										});
+										
+								})" >
+									<select  data-placeholder="اختر أو اكتب"  style="direction: rtl;font-size: 1.2em;margin-bottom: 0px;"x-ref="desc">
+										<option></option>
+										<option>اكتب وصف</option>
+										<option>خمور</option>
+										<option>ملابس</option>
+										<option>سجائر</option>
+										<option>نظارة</option>
+										<option>درون</option>
+										<option>لاسلكي</option>
+									</select>
+								</label>
+								<textarea
+									x-show="showtextarea"
+									x-data="{
+									resizeTextarea() {
+										$el.style.height = 'auto';
+										$el.style.height = `${$el.scrollHeight}px`
+									}
+									}"
+									id="textareaeditor"
+									@click="resizeTextarea()"
+									@input="resizeTextarea()"
+									rows="1"
+									placeholder=""
+									class="form-textarea"
+									style="margin-bottom: 0px;margin-top: 0.5em;overflow: hidden;resize: none;text-align: start;unicode-bidi: plaintext;"
+									x-model="wadea.desc"
+									wrap='hard'
+								></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label style="direction: rtl;font-size: 1.2em;">التاريخ</label>
+							</td>
+							<td>
+								<input style="direction: ltr;text-align: center;font-size: 1.2em;margin-bottom: 0px;padding-left: 5px;padding-right: 5px;" x-model="wadea.date" type="date"></input>						
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div style="margin: 10px;">
+				<label class="label" data-toggle="tooltip" title="" data-original-title="">
+					<i class='bx bx-image-add bx-lg' ></i>
+					<input @change="EventPhotoCropper_show($event,$el)" type="file" class="sr-only" id="input3" accept="image/*" multiple>
+				</label>
+			</div>
+			<button @click="wadeaitemsave()" class="contrast outline" style='margin-bottom: 0px;margin-top: 10px;max-width: 15em;margin: auto;'>تسجيل</button>				  
+		</article>
+	</div>
+	<div x-show="showpage == '2'" style="direction: rtl"  x-data="{filter:{cat:'الكل',term:''},filtertotal:0,
+	filterchange(cat){
+		if(cat=='الكل'){
+			value=this.filter.term
+			len = wadeasearchresults.filter((item) => { return item.number.toString().includes(value.toString()) || item.desc.toLowerCase().includes(value.toLowerCase()) }).length
+			this.filtertotal = len
+			if(len==0){
+				//this.toast('لا يوجد نتائج',false)
+			}
+			else{
+				//this.toast('يوجد '+len,true);
+			}
+		}else{
+			value=this.filter.term
+			len = this.wadeasearchresults.filter((item) => item.type==cat && (item.number.toString().includes(value.toString()) || item.desc.toLowerCase().includes(value.toLowerCase()))).length
+			this.filtertotal = len
+			if(len==0){
+				//this.toast('لا يوجد نتائج',false)
+			}
+			else{
+				//this.toast('يوجد '+len+' '+cat,true)
+
+			}
+		}
+	}
+}">
+		<article>
+			<nav><h4 style="margin-bottom: .5em;">البحث عن مشمول:</h4></nav>
+			<hr style="margin-bottom: 1em;">
+			<table style="text-wrap: nowrap;">
+				<tbody>
+					<tr>
+						<td>
+							<label style="direction: rtl;font-size: 1.2em;">نوع المشمول</label>
+						</td>
+						<td>
+							<select style="direction: rtl;font-size: 1.2em;margin-bottom: 0px;" x-model="wadeasearch.type" style>
+								<option value="" selected>الكل</option>
+								<option>محجوزات</option>
+								<option>وديعة</option>
+								<option>متروكات</option>
+								<option>مضبوطات</option>
+								<option>وارد جهات</option>
+								<option>متخلف</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label style="direction: rtl;font-size: 1.2em;">رقم المشمول</label>
+						</td>
+						<td style="grid-template-columns: auto auto;display: grid;">
+							<input style="direction: ltr;text-align: center;font-size: 1.2em;margin-bottom: 0px;padding-left: 5px;padding-right: 5px;" x-model="wadeasearch.number" type="number" oninput="this.value=this.value.replace(/[^0-9]/g,'');"></input>
+
+							<select style="margin-right: 1.5em;direction: rtl;
+							font-size: 1.2em;
+							margin-bottom: 0px;
+							padding: 5px 5px 5px 5px;
+							width: auto;" x-model="wadeasearch.year" style>
+								<option value="" selected></option>
+								<option>2023</option>
+								<option>2024</option>
+							</select>							
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label style="direction: rtl;font-size: 1.2em;">وصف المشمول</label>
+						</td>
+						<td x-data="{showtextarea:false}">
+							<label style="margin-bottom: 0px;padding-top: 7.5px;padding-bottom: 7.5px;" x-show="!showtextarea" x-init="
+							$(document).ready(()=> {
+								descsearch = $($refs.descsearch).select2({tags: true,minimumResultsForSearch: Infinity});
+								descsearch.on('select2:select', (event) => {
+									wadeasearch.desc = event.target.value;
+								});
+								$watch('wadeasearch.desc', (value) => {
+									if(value=='اكتب وصف'){
+										showtextarea=true
+										delete wadeasearch.desc
+										setTimeout(()=> {document.getElementById('textareaeditor2').focus()},0)
+										return
+									}
+									descsearch.val(value).trigger('change');
+								});
+						})" >
+							<select  data-placeholder="اختر أو اكتب"  style="direction: rtl;font-size: 1.2em;margin-bottom: 0px;"x-ref="descsearch">
+								<option></option>
+								<option>اكتب وصف</option>
+								<option>خمور</option>
+								<option>ملابس</option>
+								<option>سجائر</option>
+								<option>نظارة</option>
+								<option>درون</option>
+								<option>لاسلكي</option>
+							</select>
+						</label>
+						<textarea
+							x-show="showtextarea"
+							x-data="{
+							resizeTextarea() {
+								$el.style.height = 'auto';
+								$el.style.height = `${$el.scrollHeight}px`
+							}
+							}"
+							id="textareaeditor2"
+							@click="resizeTextarea()"
+							@input="resizeTextarea()"
+							rows="1"
+							placeholder=""
+							class="form-textarea"
+							style="margin-bottom: 0px;margin-top: 0.5em;overflow: hidden;resize: none;text-align: start;unicode-bidi: plaintext;"
+							x-model="wadeasearch.desc"
+			
+							wrap='hard'
+							
+						></textarea>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label style="direction: rtl;font-size: 1.2em;">تاريخ بداية</label>
+						</td>
+						<td>
+							<input style="direction: ltr;text-align: center;font-size: 1.2em;margin-bottom: 0px;padding-left: 5px;padding-right: 5px;" x-model="wadeasearch.datestart" type="date"></input>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<label style="direction: rtl;font-size: 1.2em;">تاريخ نهاية</label>
+						</td>
+						<td>
+							<input style="direction: ltr;text-align: center;font-size: 1.2em;margin-bottom: 0px;padding-left: 5px;padding-right: 5px;" x-model="wadeasearch.dateend" type="date"></input>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<button style="max-width: 15em;margin: auto;" @click="await wadeaitemsearch();filtertotal=wadeasearchresults.length;filter={cat:'الكل',term:''};filtertotal=0" class="contrast outline" >بحث</button>
+		</article>
+		<div style="margin: 1em;margin-top: 2em;">
+			<div style="grid-template-columns: auto auto;display: grid;gap: .5rem;">
+				<select x-model="filter.cat" @change="filterchange(filter.cat)">
+					<option>الكل</option>
+					<option>محجوزات</option>
+					<option>وديعة</option>
+					<option>متروكات</option>
+					<option>مضبوطات</option>
+					<option>وارد جهات</option>
+					<option>متخلف</option>
+				</select>
+				<input x-init="$watch('filter.term', value => {
+					if(filter.cat == 'الكل'){
+						filtertotal=wadeasearchresults.filter((item) => { return item.number.toString().includes(value.toString()) || item.desc.toLowerCase().includes(value.toLowerCase()) }).length
+					}
+					else{
+						filtertotal=wadeasearchresults.filter((item) => { return item.type.includes(filter.cat) && (item.desc.toLowerCase().includes(value.toLowerCase()) || item.number.toString().includes(value.toString())) }).length
+					}
+				})" type="text" style="height: -webkit-fill-available;unicode-bidi: plaintext;" placeholder="بحث برقم أو وصف" x-model="filter.term"></input>
+			</div>
+			<div style="grid-template-columns: auto auto;display: grid;gap: .5rem;justify-content: start;">
+				<label style="padding-right: 15px;">الإجمالي</label>
+				<label style="padding-right: 15px;letter-spacing: .1em;" x-text="filtertotal"></label>
+			</div>
+
+		</div>
+		<article style="padding-left: 10px;padding-right: 10px;">
+			<figure>
+				<table style="border-collapse: separate; border-spacing: 0 1em;" class="resultstable">
+					<tbody>
+						<template x-for="item in wadeasearchresults">
+							<tr class="resultstablerow" x-show="
+							!filter.term ? 
+
+								item.type.includes(filter.cat) || filter.cat == 'الكل' 
+
+							:
+								filter.cat == 'الكل' ?
+									item.number.toString().includes(filter.term.toString()) || item.desc.toLowerCase().includes(filter.term.toLowerCase())
+								:
+									item.type.includes(filter.cat) && (item.desc.toLowerCase().includes(filter.term.toLowerCase()) || item.number.toString().includes(filter.term.toString()))
+							
+							
+							" style="border: 2px solid var(--table-border-color-custom);">
+								<td style="padding:0;border: 2px solid var(--table-border-color-custom);vertical-align: top;border-left-width:1px">
+									<label x-text="item.type" style="font-weight: bold;font-size: 1.1em;background: #f9f9f9;padding: 5px;margin-bottom: 0px;"></label>
+									<label x-text="item.number+' / '+item.year" style="background: #f9f9f9;padding: 5px;font-weight: bold;margin-bottom: 10px;text-wrap: nowrap;opacity: .6;letter-spacing: 1.5px;"></label>
+									<label x-text="EpochToLocalIso(item.epoch).replaceAll('-','/')" style="padding: 5px;opacity: .8;letter-spacing: 1px;font-size: .9em;"></label>
+								</td>
+								<td style="padding-right: 5px;padding-left: 5px;font-size: .9em;vertical-align: top;padding-top: 10px;position: relative;border: 2px solid var(--table-border-color-custom);border-right:none">
+									<span style="white-space: pre-line;" x-text="item.desc"></span>
+									<span x-show="item.submitter" x-text="item.submitter=='المسجل'?item.submitter:'ا/ '+item.submitter" style="position: absolute;left: 0px;bottom: 0px;font-weight: bold;opacity: .2;background: #f3f3f3;padding: 4px;color: black;border-top-right-radius: 20px;"></span>
+									<div x-show="item.photo.length>0" x-data="{showimgs:false}" style="padding-left: 5px;padding-right: 5px;text-align: center;">
+										<hr>
+										<i x-show="!showimgs" @click="showimgs=true" style="width: 100%;" class='bx bxs-camera bx-sm'></i>
+										<label x-show="!showimgs" @click="showimgs=true" style="width: 100%;" x-text="item.photo.length"></label>
+										<div x-show="showimgs">
+											<table style="margin-bottom: 0px;">
+												<template x-for="(photo,index) in item.photo">
+													<tr>
+														<td :style="index!=item.photo.length-1?'padding-right: 0px;display: flex;justify-content: flex-start;':'padding-right: 0px;display: flex;justify-content: flex-start;;border: none;'">
+															<span x-text="item.photo.length+'/'+(index+1)" ></span>
+															<img x-intersect.once="$el.src = $el.dataset.src + await fileTokenfunc()" @click="window.open($el.src, '_blank');" :data-src="url+'/api/files/'+item.collectionId+'/'+item.id+'/'+photo" style="padding: 5px;height: 100px;background: transparent url(/spinner.gif) center no-repeat;width: 50px;" onload="this.style.background='none';this.style.width='auto'">
+														</td>
+													</tr>
+												</template>
+											</table>
+										<div>
+									</div>
+									
+								</td>
+							</tr>
+						</template>
+					</tbody>
+				</table>
+			</figure>
+		</article>
+	</div>
+	<div x-show="showpage == '3'" style="direction: rtl">
+		<div id="sc" style="text-align: center;"><h6 style="margin-bottom: .5em;opacity: .5;">يتم عرض ما قمت بتسجيله فقط في هذه القائمة</h6></div>
+		<article x-show="wadeaitemeditToggle" style="display: table;width: 100%;">
+			<div id="editinfotable">
+				<nav><h4 style="margin-bottom: .5em;">تعديل مشمول:</h4></nav>
+				<hr style="margin-bottom: 1em;">
+				<table style="text-wrap: nowrap;">
+					<tbody>
+						<tr>
+							<td>
+								<label style="direction: rtl;font-size: 1.2em;">نوع المشمول</label>
+							</td>
+							<td colspan="2">
+								<select style="direction: rtl;font-size: 1.2em;margin-bottom: 0px;" x-model="wadeaitemeditObject.type" style>
+									<option value="" disabled selected></option>
+									<option>محجوزات</option>
+									<option>وديعة</option>
+									<option>متروكات</option>
+									<option>مضبوطات</option>
+									<option>وارد جهات</option>
+									<option>متخلف</option>
+								</select>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label style="direction: rtl;font-size: 1.2em;">رقم المشمول</label>
+							</td>
+							<td style="grid-template-columns: auto auto;display: grid;">
+								<input style="direction: ltr;text-align: center;font-size: 1.2em;margin-bottom: 0px;padding-left: 5px;padding-right: 5px;" x-model="wadeaitemeditObject.number" type="number" oninput="this.value=this.value.replace(/[^0-9]/g,'');"></input>
+
+								<select style="margin-right: 1.5em;direction: rtl;
+								font-size: 1.2em;
+								margin-bottom: 0px;
+								padding: 5px 5px 5px 5px;
+								width: auto;" x-model="wadeaitemeditObject.year" style>
+									<option value="" disabled="" selected=""></option>
+									<option>2023</option>
+									<option>2024</option>
+								</select>							
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label style="direction: rtl;font-size: 1.2em;">وصف المشمول</label>
+							</td>
+							<td colspan="2">
+									<textarea
+									x-data="{
+									resizeTextarea() {
+										$el.style.height = 'auto';
+										$el.style.height = `${$el.scrollHeight}px`
+									}
+									}"
+									id="textareaeditor"
+									@click="resizeTextarea()"
+									@input="resizeTextarea()"
+									@chang="resizeTextarea()"
+									rows="1"
+									placeholder=""
+									class="form-textarea"
+									style="margin-bottom: 0px;margin-top: 0.5em;overflow: hidden;resize: none;text-align: start;unicode-bidi: plaintext;"
+									x-model="wadeaitemeditObject.desc"
+					
+									wrap='hard'
+									
+								></textarea>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<label style="direction: rtl;font-size: 1.2em;">التاريخ</label>
+							</td>
+							<td>
+								<input style="direction: ltr;text-align: center;font-size: 1.2em;margin-bottom: 0px;padding-left: 5px;padding-right: 5px;" x-model="wadeaitemeditObject.date" type="date"></input>						
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div style="margin: 10px;">
+				<label class="label" data-toggle="tooltip" title="" data-original-title="">
+					<i class='bx bx-image-add bx-lg' ></i>
+					<input @change="EventPhotoCropper_show($event,$el)" type="file" class="sr-only" id="input3" accept="image/*" multiple>
+				</label>
+			</div>
+			<table>
+				<tbody>
+					<tr>
+						<td>
+							<button @click="if(!confirm('هل أنت متأكد من حفظ التعديل؟')){return};wadeaitemeditsavefunc()" class="contrast outline" style='margin-bottom: 0px;margin-top: 10px;margin: auto;'>حفظ</button>				  
+						</td>
+						<td>
+							<button @click="if(!confirm('هل أنت متأكد من إلغاء التعديل؟')){return};wadeaitemeditstopfunc()" class="contrast outline" style='margin-bottom: 0px;margin-top: 10px;margin: auto;'>إلغاء</button>				  
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</article>
+		<div x-show="!wadeaitemeditToggle">
+			<div style="margin: 1em;margin-top: 2em;">
+				<div style="grid-template-columns: auto auto;display: grid;gap: .5rem;">
+					<select x-model="filter.cat" @change="filterchange(filter.cat)">
+						<option>الكل</option>
+						<option>محجوزات</option>
+						<option>وديعة</option>
+						<option>متروكات</option>
+						<option>مضبوطات</option>
+						<option>وارد جهات</option>
+						<option>متخلف</option>
+					</select>
+					<input x-init="$watch('filter.term', value => {
+						if(filter.cat == 'الكل'){
+							filtertotal=ShowRegisterByMeResult.filter((item) => { return item.number.toString().includes(value.toString()) || item.desc.toLowerCase().includes(value.toLowerCase()) }).length
+						}
+						else{
+							filtertotal=ShowRegisterByMeResult.filter((item) => { return item.type.includes(filter.cat) && (item.desc.toLowerCase().includes(value.toLowerCase()) || item.number.toString().includes(value.toString())) }).length
+						}
+					})" type="text" style="height: -webkit-fill-available;unicode-bidi: plaintext;" placeholder="بحث برقم أو وصف" x-model="filter.term"></input>
+				</div>
+				<div style="grid-template-columns: auto auto;display: grid;gap: .5rem;justify-content: start;">
+					<label style="padding-right: 15px;">الإجمالي</label>
+					<label style="padding-right: 15px;letter-spacing: .1em;" x-text="filtertotal"></label>
+				</div>
+
+			</div>
+			<article style="padding-left: 10px;padding-right: 10px;text-align: center;margin-top: 10px;">
+				<figure style="margin-bottom: 0px;">
+					<table class="RegisterByMetable" style="border-collapse: separate; border-spacing: 0 1em;margin-bottom: 0px">
+						<tbody>
+							<template x-for="item in ShowRegisterByMeResult">
+								<tr class="resultstablerow" x-show="
+								!filter.term ? 
+
+									item.type.includes(filter.cat) || filter.cat == 'الكل' 
+
+								:
+									filter.cat == 'الكل' ?
+										item.number.toString().includes(filter.term.toString()) || item.desc.toLowerCase().includes(filter.term.toLowerCase())
+									:
+										item.type.includes(filter.cat) && (item.desc.toLowerCase().includes(filter.term.toLowerCase()) || item.number.toString().includes(filter.term.toString()))
+								
+								
+								" style="border: 2px solid var(--table-border-color-custom);">
+									<td style="padding: 0;border: 2px solid var(--table-border-color-custom);border-left-width:1px;vertical-align: top;">
+										<label x-text="item.type" style="font-weight: bold;font-size: 1.1em;background: #f9f9f9;padding: 5px;margin-bottom: 0px;"></label>
+										<label x-text="item.number+' / '+item.year" style="background: #f9f9f9;padding: 5px;font-weight: bold;margin-bottom: 10px;text-wrap: nowrap;opacity: .6;letter-spacing: 1.5px;"></label>
+										<label x-text="EpochToLocalIso(item.epoch).replaceAll('-','/')" style="padding: 5px;opacity: .8;letter-spacing: 1px;font-size: .9em;"></label>
+									</td>
+									<td style="padding-right: 5px;padding-left: 5px;font-size: .9em;vertical-align: top;padding-top: 10px;position: relative;border: 2px solid var(--table-border-color-custom);border-right:none">
+										<span style="white-space: pre-line;" x-text="item.desc"></span>
+										<span x-show="item.submitter" x-text="item.submitter=='المسجل'?item.submitter:'ا/ '+item.submitter" style="position: absolute;left: 0px;bottom: 0px;font-weight: bold;opacity: .2;background: #f3f3f3;padding: 4px;color: black;border-top-right-radius: 20px;"></span>
+										<div x-show="item.photo.length>0" x-data="{showimgs:false}" style="padding-left: 5px;padding-right: 5px;text-align: center;">
+											<hr>
+											<i x-show="!showimgs" @click="showimgs=true" style="width: 100%;" class='bx bxs-camera bx-sm'></i>
+											<label x-show="!showimgs" @click="showimgs=true" style="width: 100%;" x-text="item.photo.length"></label>
+											<div x-show="showimgs">
+												<table style="margin-bottom: 0px;">
+													<template x-for="(photo,index) in item.photo">
+														<tr>
+															<td :style="index!=item.photo.length-1?'padding-right: 0px;display: flex;justify-content: flex-start;':'padding-right: 0px;display: flex;justify-content: flex-start;;border: none;'">
+																<span x-text="item.photo.length+'/'+(index+1)" ></span>
+																<img x-intersect.once="$el.src = $el.dataset.src + await fileTokenfunc()" @click="window.open($el.src, '_blank');" :data-src="url+'/api/files/'+item.collectionId+'/'+item.id+'/'+photo" style="padding: 5px;height: 100px;background: transparent url(/spinner.gif) center no-repeat;width: 50px;" onload="this.style.background='none';this.style.width='auto'">
+															</td>
+														</tr>
+													</template>
+												</table>
+											<div>
+										</div>
+									</td>
+									<td style="width: 10px;padding-left: 5px;padding-right: 5px;border: 2px solid var(--table-border-color-custom);border-right:none;vertical-align: top;padding-top: 20px;">
+										<i @click="if(confirm('هل أنت متأكد من التعديل؟')){wadeaitemeditfunc(item)}" class='bx bxs-edit bx-sm' style="margin-bottom: 1em;opacity: .5;"></i>
+										<i @click="if(confirm('هل أنت متأكد من الحذف؟')){wadeaitemdelete(item.id)}" class='bx bx-x bx-sm' style="color:darkred;opacity: .5; " ></i>
+									</td>
+
+								</tr>
+							</template>
+						</tbody>
+					</table>
+				</figure>
+			</article>
+		</div>
+	</div>
+</section>
+	</div>
+	
+ <dialog x-show="!showloading" class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true" style="padding-right: 0px;padding-left: 0px;">
+      <div class="modal-dialog" role="document" style="
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+">
+        <div class="modal-content">
+          <div class="modal-header">
+          </div>
+          <div class="modal-body" >
+            <div class="img-container" >
+              <img id="image3" style="max-height: 70vh;">
+            </div>
+          </div>
+          <div class="modal-footer">
+			  <div class="grid container" style="grid-template-columns:repeat(auto-fit,minmax(0%,1fr));padding-left: 0px;padding-right: 20px;">
+				<button type="button" class="btn btn-secondary" id="cropcancel2" data-dismiss="modal" style="margin: 10px;">إلغاء</button>
+				<button @click="EventPhotoCropper_Action()" type="button" class="btn btn-primary" id="crop2" style="margin: 10px;">حفظ</button>
+			</div>
+          </div>
+        </div>
+      </div>
+</dialog>
+    </main>
+	<footer style="font-size: .9em;color: darkgray;text-align: center;display: table-row;">
+		<hr style="margin: 1rem;">
+		<label>نسخة تجريبية</label>
+		<label style="padding-bottom: 0em;">© Mohamed Samy - 2023</label>
+	</footer>
+
+	<script src="js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+	<script src="js/cropper.js"></script>
+	<script>
+
+document.addEventListener('alpine:init', () => {
+			   Alpine.data('lists', () => ({
+				 url: "https://msami.pockethost.io",
+			  	 client: null,
+				 showpage:'',
+				 user:{name:null,email:null,pass:null,passconf:null,verifytoken:null},
+				 userdata: {},
+				 cropper:null,
+				 showloading:true,
+				 certimgloaded:null,
+				 canvas:null,
+				 TextareaMaxHeight:50,
+				 wadea:{year:new Date().getFullYear(),desc:''},
+				 wadeasearch:{},
+				 wadeasearchresults:[],
+				 ShowRegisterByMeResult:[],
+				 wadeaitemeditToggle:false,
+				 wadeaitemeditObject:{},
+				 filter:{cat:'الكل',term:''},
+				 filtertotal:0,
+				 loadlast:false,
+				 fileToken:{time:0,value:null,gettingtimetoken:false},
+				 fileTokenLife:3500,
+				 scrollposition:null,
+				 showplaceholder:true,
+				async init () {
+					ddate=this.EpochToLocalIso(Math.floor(new Date().getTime() / 1000))
+					this.wadea.date=ddate
+					this.wadeasearch.dateend=ddate
+					this.showloading=true
+				   document.body.style.display=""
+				   // initialize pocketbase
+				   this.client = new PocketBase(this.url);
+				   this.client.authStore.storageKey="wadea"
+				   // capture invalid token
+				   this.client.afterSend = function (response, data) {
+					   if (response.status === 401) {
+						   this.showpage = '0'
+						   this.showloading=false
+						   this.client.authStore.clear()
+					   }
+					   return data
+				   }
+				   
+				   
+				   // if user is not logged in, show login / signup page
+				   if (!window.localStorage.getItem('wadea')) {
+					   this.showpage = '0'
+					   this.showloading=false
+					   return
+				   }
+				   
+				   try{
+					   // resume session
+					   const auth = JSON.parse(window.localStorage.getItem('wadea'))
+					   this.client.authStore.save(auth.token, auth.model)
+					   //this.userdata=auth.model
+					   const authData = await this.client.collection('egca_users').authRefresh();
+					   this.userdata=authData.record
+					   
+					   if (this.client.authStore.baseModel.iswadeauser != true || this.client.authStore.baseModel.verified != true) {
+						   this.showpage = '0'
+						   this.showloading=false
+						   this.client.authStore.clear()
+					   };
+					   this.showpage = '0,1'
+					   this.showloading=false
+					   await this.fileTokenfunc()
+				   }catch (e){
+						console.log(e)
+					   this.showpage = '0'
+					   this.showloading=false
+					   this.client.authStore.clear()
+					   return
+				   }
+	   
+				 },
+				toast(msgstring,success,removedelay=3000){
+					   const toast_wrapper = document.getElementById("toastwrapper");
+					   while (toast_wrapper.hasChildNodes()) {
+						   toast_wrapper.removeChild(toast_wrapper.firstChild);
+					   }
+					 template_Id = () =>  {if(success){return 'toastsuccess'}else{return 'toastfail'}}
+					 //~ setTimeout(() => {
+					   this.$notify(msgstring, {
+						   wrapperId: 'toastwrapper',
+						   templateId: template_Id(),
+						   autoRemove: true,
+						   autoClose: removedelay
+					   })
+					   //~ }, 100)
+				 },
+				 EventPhotoCropper_show(e,input){
+					   var files = e.target.files;
+					   for(i=0; i<files.length;i++){
+							this.showloading=true
+							file = files[i];
+							reader = new FileReader();
+							reader.onload = async (event) => {
+								var img = new Image();//create a image
+								img.src = event.target.result;//result is base64-encoded Data URI
+								img.onload = async (el) => {
+									var elem = document.createElement('canvas');//create a canvas
+
+									elem.width = 1000;
+									elem.height = el.target.height * (elem.width / el.target.width);
+									if(elem.height>1000){
+										elem.width = elem.width * (1000/elem.height)
+										elem.height=1000
+									}
+
+									//draw in canvas
+									var ctx = elem.getContext('2d');
+									ctx.drawImage(el.target, 0, 0, elem.width, elem.height);
+
+									//get the base64-encoded Data URI from the resize image
+									var srcEncoded = await ctx.canvas.toDataURL('image/webp', 0.7);
+
+									//assign it to thumb src
+									var imgg = new Image();
+									imgg.src = srcEncoded;
+
+									imgg.onclick = function() { 
+										if( confirm ('هل تريد حذف هذه الصورة؟')){this.parentNode.removeChild(this)}
+									};
+
+									imgg.style.maxHeight= "300px";
+									imgg.style.padding= "1em";
+									imgg.style.display="table-row";
+									imgg.onload = () => {
+										if(this.showpage=='1'){
+											elid='infotable'
+										}else if(this.showpage=='3'){
+											elid='editinfotable'
+										}
+										document.getElementById(elid).appendChild(imgg);
+										delete img
+										this.showloading=false
+									}
+								}
+							};
+							reader.readAsDataURL(file);
+					   }
+				 },
+				EventPhotoCropper_show2(e,input){
+					   this.showloading=true
+					   image = document.getElementById('image3');
+					   if(this.cropper){
+						   this.cropper.destroy();
+						   this.cropper = null;
+					   }
+					   var files = e.target.files;
+					   var done = (url) => {
+						   
+						   input.value = '';
+						   image.src = url;
+						   this.cropper = new Cropper(image, {
+							   //~ aspectRatio: 1,
+							   viewMode: 1,
+							   ready: () => {this.showloading=false},
+							   autoCropArea:1
+						   });
+						   $('#modal3').modal('show');
+						   this.showloading=true
+					   };
+					   var reader;
+					   var file;
+					   var url;
+					   if (files && files.length > 0) {
+						   file = files[0];
+						   if (URL) {
+							   done(URL.createObjectURL(file));
+						   } else if (FileReader) {
+							   reader = new FileReader();
+							   reader.onload = function (e) {
+								   done(reader.result);
+							   };
+							   reader.readAsDataURL(file);
+						   }
+					   }
+				 },
+				async EventPhotoCropper_Action(){
+					   this.showloading=true
+					   //eventphoto = document.getElementById('eventphoto');									   
+					   setTimeout( async () => {
+						   if (this.cropper) {
+								this.canvas = await this.cropper.getCroppedCanvas({
+									maxHeight: 1000,
+									maxWidth: 1000
+								});
+								let img = document.createElement('img');
+								img.onclick = function() { 
+									if( confirm ('هل تريد حذف هذه الصورة؟')){this.parentNode.removeChild(this)}
+								 };
+
+								img.style.maxHeight= "300px";
+								img.style.padding= "1em";
+								img.style.display="table-row";
+								img.src = await this.canvas.toDataURL('image/webp', 0.7);
+								if(this.showpage=='1'){
+									elid='infotable'
+								}else if(this.showpage=='3'){
+									elid='editinfotable'
+								}
+								document.getElementById(elid).appendChild(img);
+								this.showloading=false
+								$('#modal3').modal('hide');
+								this.canvas=null
+						   }
+					   }, 10)
+				   },
+				async wadeaitemsave(){
+					if(!this.wadea.type || !this.wadea.number || !this.wadea.date){
+						this.toast('الرجاء مراجعة البيانات',false)
+						return
+					}
+					if(!confirm("هل أنت متأكد من التسجيل؟")){return}
+					try{
+						this.showloading=true
+						var formData = new FormData();
+						formData.append('user', this.client.authStore.baseModel.id);
+						formData.append('submitter', this.client.authStore.baseModel.name.split(" ").slice(0, 2).join(" "));
+						formData.append('epoch', this.LocalIsoToEpoch(this.wadea.date));
+						formData.append('type', this.wadea.type);
+						formData.append('number', this.wadea.number);
+						formData.append('year', this.wadea.year);
+						formData.append('desc', this.wadea.desc);
+						imgs=$("#infotable img")
+						for(i=0; i<imgs.length; i++){
+							formData.append('photo', this.dataURLtoBlob(imgs[i].src), (i+1)+".webp");
+						}
+						await this.client.collection('wadeafiles_items').create(formData);
+						this.toast('تم الإضافة بنجاح',true)
+						delete this.wadea.number
+						for(i=0; i<imgs.length; i++){
+							imgs[i].parentNode.removeChild(imgs[i]);
+						}
+						this.showloading=false
+					}catch(e){
+						console.log(e)
+						this.toast('فشل الإضافة',false)
+						this.showloading=false
+					}
+
+				},
+				async wadeaitemsearch(){
+					if (Math.floor(new Date(this.wadeasearch.datestart)>Math.floor(new Date(this.wadeasearch.dateend)))) {
+						this.toast('تاريخ البداية يجب أن يكون أقل من النهاية',false)
+						return
+					}
+					this.showloading=true
+					search=null
+					if(this.wadeasearch.type){
+						search='type="'+this.wadeasearch.type+'"'
+					}
+					if(this.wadeasearch.number){
+						if(search){
+							search+='&&number="'+this.wadeasearch.number+'"'
+						}else{
+							search='number="'+this.wadeasearch.number+'"'
+						}		
+					}
+					if(this.wadeasearch.year){
+						if(search){
+							search+='&&year="'+this.wadeasearch.year+'"'
+						}else{
+							search='year="'+this.wadeasearch.year+'"'
+						}	
+					}
+					if(this.wadeasearch.desc){
+						if(search){
+							search+='&&desc~"'+this.wadeasearch.desc+'"'
+						}else{
+							search='desc~"'+this.wadeasearch.desc+'"'
+						}
+					}
+					epochstart=this.LocalIsoToEpoch(this.wadeasearch.datestart)
+					epochend=this.LocalIsoToEpoch(this.wadeasearch.dateend)+86400
+					if(this.wadeasearch.datestart && this.wadeasearch.dateend){
+						if(search){
+							search+='&&epoch>="'+epochstart+'"'
+							search+='&&epoch<="'+epochend+'"'
+						}else{
+							search='epoch>="'+epochstart+'"'
+							search+='&&epoch<="'+epochend+'"'
+						}
+					}
+					else if(this.wadeasearch.dateend){
+						if(search){
+							search+='&&epoch<="'+epochend+'"'
+						}else{
+							search='epoch<="'+epochend+'"'
+						}
+					}
+					//console.log(search)
+					this.wadeasearchresults = []
+					this.wadeasearchresults = await this.client.collection('wadeafiles_items').getFullList({
+							   sort: '-number',
+							   filter: search,
+						   });
+					len=this.wadeasearchresults.length
+					if(len == 0){
+						this.toast('لا يوجد نتائج',false)
+					}else{
+						this.toast('يوجد '+len+' نتيجة',true)
+					}
+					//console.log(records)
+					this.showloading=false
+				},
+				dataURLtoBlob(dataurl) {
+					var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+						bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+					while(n--){
+						u8arr[n] = bstr.charCodeAt(n);
+					}
+					return new Blob([u8arr], {type:mime});
+				},
+				async login () {
+				   try {
+					   //loader(true)
+					  this.showloading=true
+					 const user = await this.client.collection('egca_users').authWithOAuth2({ provider: 'google' })
+					 this.userdata = user.record
+					 this.showloading=false
+					 if (this.client.authStore.baseModel.iswadeauser != true || this.client.authStore.baseModel.verified != true) {
+						   this.toast('تأكد من الايميل',false)
+						   this.client.authStore.clear()
+						   return
+					 };
+					        
+					 this.showpage  ="0,1"
+					 this.user={name:null,email:null,pass:null,passconf:null}
+				   } catch (err) {
+					 this.toast('تأكد من الايميل',false)
+					   this.showloading=false
+				   }
+				 },
+				async logout () {
+					   this.userdata={}
+					   this.user={}
+					   this.resetpass= {email:null,token:null,newpass:null,newpassconf:null}
+					   this.importantevents={loaded:false,arr:[],add:{}}
+					   this.certsandskills={languages:[],certs:{arr:[]},add:{}}
+					   this.languagesedit=false
+					   this.userdata= {profilepicurl:'Blank-Avatar.jpeg'}
+					   this.client.authStore.clear()
+					   this.showpage = '0'
+					 return
+				},
+				async ShowRegisterByMe(){
+					this.filter = {cat:'الكل',term:''}
+				 	this.filtertotal=0
+					this.wadeaitemeditToggle=false
+					try{
+						this.showloading=true
+						search='user="'+this.client.authStore.baseModel.id+'"'
+						SortString="-created"
+						if(this.loadlast){
+							search+= '&&epoch>="'+ Math.floor(new Date(new Date().setHours(0,0,0,0)).setDate(new Date().getDate() - 1)/1000)+'"'
+               				SortString="-created"
+						}
+						ShowRegisterByMeResult = await this.client.collection('wadeafiles_items').getFullList({
+							   sort: SortString,
+							  filter: search,
+						});
+						this.ShowRegisterByMeResult=[]
+						await this.delay(10)
+						this.ShowRegisterByMeResult=ShowRegisterByMeResult
+						len=this.ShowRegisterByMeResult.length
+						this.filtertotal=len
+						if(len == 0){
+						this.toast('لا يوجد نتائج',false)
+						}else{
+							this.toast('يوجد '+len+' نتيجة',true)
+						}
+						//console.log(this.ShowRegisterByMeResult)
+						this.showpage = '3'
+						this.showloading=false
+					}catch(e){
+						console.log(e)
+						this.toast('حدث خطأ',false)
+						this.showloading=false
+					}
+				},
+				async wadeaitemdelete(id){
+					try{
+						this.showloading=true
+						await this.client.collection('wadeafiles_items').delete(id);
+						this.toast('تم الحذف بنجاح',true)
+						//alert("تم الحذف بنجاح, سيتم إعادة تحميل البيانات")
+						
+						//await this.ShowRegisterByMe()
+						ShowRegisterByMeResult=this.ShowRegisterByMeResult
+						this.ShowRegisterByMeResult=[]
+						await this.delay(10)
+						this.ShowRegisterByMeResult = ShowRegisterByMeResult.filter((el) => { return el.id != id; });
+						this.filtertotal-=1
+						this.showloading=false
+					}catch(e){
+						console.log(e)
+						this.toast('حدث خطأ',false)
+						this.showloading=false
+					}
+				},
+				async wadeaitemeditfunc(item){
+					try{
+						this.scrollposition=$( document ).scrollTop();
+						//console.log(this.scrollposition)
+						async function readBlob(b) {
+							return new Promise(function(resolve, reject) {
+							const reader = new FileReader();
+
+							reader.onloadend = function() {
+								resolve(reader.result);
+							};
+							reader.readAsDataURL(b);
+							});
+						}
+						this.showloading=true
+						//this.wadeaitemeditstopfunc()
+						//item.date=new Date(item.epoch*1000).toISOString().substr(0, 10)
+						item.date=this.EpochToLocalIso(item.epoch)
+						this.wadeaitemeditObject=item;
+						this.wadeaitemeditToggle=true;
+						setTimeout(()=> {document.getElementById('sc').scrollIntoView()},0)
+
+						for(i=0;i<item.photo.length;i++){
+							path=this.url+'/api/files/'+item.collectionId+'/'+item.id+'/'+item.photo[i] + await this.fileTokenfunc()
+							const response = await fetch(path);
+							const blob = await response.blob();
+							const content = await readBlob(blob);
+
+							let img = document.createElement('img');
+							img.onclick = function() { 
+								if( confirm ('هل تريد حذف هذه الصورة؟')){this.parentNode.removeChild(this)}
+								};
+
+							img.style.maxHeight= "300px";
+							img.style.padding= "1em";
+							img.style.display="table-row";
+							img.src = content;
+							document.getElementById('editinfotable').appendChild(img);
+						}
+						this.showloading=false
+					}
+					catch(e){
+						console.log(e)
+						this.toast('حدث خطأ',false)
+						this.showloading=false
+					}
+				},
+				async wadeaitemeditsavefunc(){
+					if(!this.wadeaitemeditObject.type || !this.wadeaitemeditObject.number || !this.wadeaitemeditObject.date || !this.wadeaitemeditObject.year){
+						this.toast('الرجاء مراجعة البيانات',false)
+						return
+					}
+					try{
+						this.showloading=true
+						var formData = new FormData();
+						formData.append('user', this.client.authStore.baseModel.id);
+						formData.append('type', this.wadeaitemeditObject.type);
+						formData.append('number', this.wadeaitemeditObject.number);
+						formData.append('year', this.wadeaitemeditObject.year);
+						formData.append('desc', this.wadeaitemeditObject.desc);
+						//formData.append('epoch', Math.floor(new Date(this.wadeaitemeditObject.date) / 1000));
+						formData.append('epoch', this.LocalIsoToEpoch(this.wadeaitemeditObject.date));
+						imgs=$("#editinfotable img")
+						if(imgs.length>0){
+							formData.append('photo', []);
+							for(i=0; i<imgs.length; i++){
+								formData.append('photo', this.dataURLtoBlob(imgs[i].src), (i+1)+".webp");
+							}
+						}else{
+							formData.append('photo', []);
+						}
+						await this.client.collection('wadeafiles_items').update(this.wadeaitemeditObject.id,formData);
+						this.toast('تم التعديل بنجاح',true)
+						for(i=0; i<imgs.length; i++){
+							imgs[i].parentNode.removeChild(imgs[i]);
+						}
+						this.wadeaitemeditstopfunc()
+						//alert("تم التعديل بنجاح, سيتم إعادة تحميل البيانات")
+						await this.ShowRegisterByMe()
+						this.showloading=false
+					}catch(e){
+						console.log(e)
+						this.toast('فشل التعديل',false)
+						this.showloading=false
+					}
+
+				},				
+				wadeaitemeditstopfunc(){
+					this.wadeaitemeditToggle=false;
+					//console.log(this.scrollposition)
+					time=0
+					count=1
+					setTimeout( async()=> {
+						while(this.scrollposition && $( document ).scrollTop() < this.scrollposition-100){
+							$( document ).scrollTop(this.scrollposition)
+							await this.delay(time)
+							//console.log(this.scrollposition,time)
+							time+=10
+							count+=1
+							if(count>10){break}
+						}
+						},0)
+					this.wadeaitemeditObject={}
+					imgs=$("#editinfotable img")
+					for(i=0; i<imgs.length; i++){
+						imgs[i].parentNode.removeChild(imgs[i])
+					}
+				},
+				filterchange(cat){
+					if(cat=='الكل'){
+						value=this.filter.term
+						len = ShowRegisterByMeResult.filter((item) => { return item.number.toString().includes(value.toString()) || item.desc.toLowerCase().includes(value.toLowerCase()) }).length
+						this.filtertotal=len
+						if(len==0){
+						//	this.toast('لا يوجد نتائج',false)
+						}
+						else{
+							//this.toast('يوجد '+len,true);
+						}
+					}else{
+						value=this.filter.term
+						len=this.ShowRegisterByMeResult.filter((item) => item.type==cat  && (item.number.toString().includes(value.toString()) || item.desc.toLowerCase().includes(value.toLowerCase()))).length
+						this.filtertotal=len
+						if(len==0){
+							//this.toast('لا يوجد نتائج',false)
+						}
+						else{
+							//this.toast('يوجد '+len+' '+cat,true)
+
+						}
+					}
+				},
+				async fileTokenfunc(){
+					if(!window.localStorage.getItem('wadea')){return}
+
+					while(this.fileToken.gettingtimetoken){
+						await this.delay(100)
+					}
+
+					elapsed_sec=(Date.now()-this.fileToken.time)/1000
+					
+					if(elapsed_sec >= this.fileTokenLife){
+						//console.log('getting')
+						try{
+							this.fileToken.gettingtimetoken=true
+							this.fileToken = {time:Date.now(),value:'?token='.concat(await this.client.files.getToken())};
+							this.fileToken.gettingtimetoken=false
+							return this.fileToken.value
+						}catch(e){
+							console.log(e)
+							if(e.response.code==429){
+								
+							}
+							this.fileToken ={time:0,value:null}
+							this.fileToken.gettingtimetoken=false
+						}
+					}else{
+						if(this.fileToken.value){
+							return this.fileToken.value
+						}else{
+							return
+						}
+					}				
+				},
+				async delay(time) {
+					return new Promise(resolve => setTimeout(resolve, time));
+				},
+				LocalIsoToEpoch(isodate){
+					return Math.floor(new Date(new Date(new Date(isodate).getTime() + (new Date(isodate).getTimezoneOffset() * 60000))) / 1000)
+				},
+				EpochToLocalIso(epoch){
+					return new Date(new Date(epoch*1000).getTime() - (new Date(epoch*1000).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+				}
+			   }))
+			 })
+
+	</script>
+</body>
+</html>
