@@ -446,9 +446,9 @@ html{
 	<aside>
   <nav x-show="showpage != '0'" class="sidenavfull">
     <ul>
-	  <li><a :class="showpage == '1'? 'selectednav':'nselectednav'" @click="window.scrollTo({top: 0});showpage = '1'">تسجيل مشمول</a></li>
+	  <li><a :class="showpage == '1'? 'selectednav':'nselectednav'" @click="window.scrollTo({top: 0});showpage = '1';setdates()">تسجيل مشمول</a></li>
 	  <hr></hr>		
-	  <li><a :class="showpage == '2'? 'selectednav':'nselectednav'" @click="window.scrollTo({top: 0});showpage = '2'">البحث عن مشمول</a></li>
+	  <li><a :class="showpage == '2'? 'selectednav':'nselectednav'" @click="window.scrollTo({top: 0});showpage = '2';setdates()">البحث عن مشمول</a></li>
 	  <hr></hr>		
 	  <li><a :class="showpage == '3' && !loadlast ? 'selectednav':'nselectednav'" @click="window.scrollTo({top: 0});loadlast=false;ShowRegisterByMe()">عرض كل ما سجلته</a></li>
 	  <hr></hr>		
@@ -1045,9 +1045,7 @@ document.addEventListener('alpine:init', () => {
 				 scrollposition:null,
 				 showplaceholder:true,
 				async init () {
-					ddate=this.EpochToLocalIso(Math.floor(new Date().getTime() / 1000))
-					this.wadea.date=ddate
-					this.wadeasearch.dateend=ddate
+					this.setdates()
 					this.showloading=true
 				   document.body.style.display=""
 				   // initialize pocketbase
@@ -1595,6 +1593,11 @@ document.addEventListener('alpine:init', () => {
 				},
 				EpochToLocalIso(epoch){
 					return new Date(new Date(epoch*1000).getTime() - (new Date(epoch*1000).getTimezoneOffset() * 60000)).toISOString().substr(0, 10)
+				},
+				setdates(){
+					ddate=this.EpochToLocalIso(Math.floor(new Date().getTime() / 1000))
+					this.wadea.date=ddate
+					this.wadeasearch.dateend=ddate
 				}
 			   }))
 			 })
